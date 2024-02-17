@@ -7,7 +7,7 @@ const {
   BadRequestError,
 } = require('../errors');
 
-const { createJWT } = require('../utils');
+const { attachCookiesToResponse } = require('../utils');
 
 const register = async (req, res) => {
   // {...} From the front-end endpoint.
@@ -25,16 +25,9 @@ const register = async (req, res) => {
   const user = await User.create({ email, name, password, role });
 
   const tokenUser = { name: user.name, userID: user._id, role: user.role };
-  const token = createJWT({ payload: tokenUser });
 
-  const oneDay = 1000 * 60 * 60 * 24;
+  attachCookiesToResponse({ res, user: tokenUser });
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    expires: new Date(Date.now() + oneDay),
-  });
-
-  res.status(StatusCodes.CREATED).json({ user: tokenUser });
 };
 
 const login = async (req, res) => {
