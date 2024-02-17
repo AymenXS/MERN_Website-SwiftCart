@@ -19,19 +19,34 @@ const register = async (req, res) => {
   }
 
   const isFirstAccount = (await User.countDocuments({})) === 0;
-  const role = isFirstAccount ? 'admin' : 'user';
 
-  // {...} From the User Schema; MongoDB.
+  const role = isFirstAccount ? 'admin' : 'user';
   const user = await User.create({ email, name, password, role });
 
   const tokenUser = { name: user.name, userID: user._id, role: user.role };
-
   attachCookiesToResponse({ res, user: tokenUser });
-
+  res.status(StatusCodes.CREATED).json({ user: tokenUser });
 };
 
 const login = async (req, res) => {
-  res.send('login user');
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError('Please provide Email and Password');
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new UnauthenticatedError('Invalid Credentials');
+  }
+
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError('Invalid Credentials');
+  }
+
+  const tokenUser = { name: user.name, userID: user._id, role: user.role };
+  attachCookiesToResponse({ res, user: tokenUser });
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const logout = async (req, res) => {
