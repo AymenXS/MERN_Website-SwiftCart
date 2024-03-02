@@ -17,12 +17,15 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-const authorizePermissions = (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    throw new CustomAPIError.UnauthenticatedError('Unauthorized to access this route');
-  }
-  
-  next();
+// (...roles) Rest Operator
+const authorizePermissions = (...roles) => {
+  // Returning a function as callback
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      throw new CustomAPIError.UnauthenticatedError('Unauthorized to access this route');
+    }
+    next();
+  };
 };
 
 module.exports = {
