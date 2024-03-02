@@ -14,7 +14,7 @@ const getSingleUser = async (req, res) => {
     throw new CustomError.NotFoundError(`No user with id: ${req.params.id}`);
   }
 
-  res.status(StatusCodes.OK).json({user})
+  res.status(StatusCodes.OK).json({ user });
 };
 
 const showCurrentUser = async (req, res) => {
