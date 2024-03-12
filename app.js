@@ -12,6 +12,7 @@ const fileUpload = require('express-fileupload');
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
 const productRouter = require('./routes/productRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 // Middlewares
 const notFoundMiddleware = require('./middleware/not-found');
