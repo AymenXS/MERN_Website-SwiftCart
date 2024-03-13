@@ -21,7 +21,6 @@ const getSingleProduct = async (req, res) => {
   const { id: productID } = req.params;
 
   const product = await Product.findOne({ _id: productID });
-
   if (!product) {
     throw new CustomError.NotFoundError(`No product with id: ${productID}`);
   }
