@@ -25,7 +25,7 @@ const createReview = async (req, res) => {
   req.body.user = req.user.userID;
   const review = await Review.create(req.body);
 
-  res.status(StatusCodes.CREATED).send('create review');
+  res.status(StatusCodes.CREATED).json({ review });
 };
 
 const getAllReviews = async (req, res) => {
