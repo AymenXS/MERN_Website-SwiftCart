@@ -4,7 +4,6 @@ const Product = require('../models/Product');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const { checkPermissions } = require('../utils');
-const path = require('path');
 
 const createReview = async (req, res) => {
   const { product: productID } = req.body;
